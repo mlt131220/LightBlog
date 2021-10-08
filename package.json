@@ -1,0 +1,25 @@
+{
+  "name": "light-blog",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "@vicons/fa": "^0.11.0",
+    "naive-ui": "^2.19.5",
+    "node-sass": "^6.0.1",
+    "sass": "^1.42.1",
+    "sass-loader": "^12.1.0",
+    "vue": "^3.2.16",
+    "vue-i18n": "^9.1.9",
+    "vue-router": "4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^1.9.3",
+    "typescript": "^4.4.3",
+    "vite": "^2.6.4",
+    "vue-tsc": "^0.3.0"
+  }
+}
