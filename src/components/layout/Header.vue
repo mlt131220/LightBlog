@@ -1,77 +1,83 @@
 <script lang="ts" setup>
-import { h, ref,inject } from 'vue'
-import { NIcon, NMenu, NSwitch, NGradientText,NPopover } from 'naive-ui'
-import {
-  FileRegular as File,
-  EditRegular as Edit,
-  Plus as Add,
-  Link as Help
-} from '@vicons/fa'
+import { ref, inject, computed } from 'vue'
+import { NMenu, NGradientText, NPopover,NButton } from 'naive-ui'
 
-function renderIcon(icon: any) {
-  return () => h(NIcon, null, { default: () => h(icon) })
-}
+const t: any = inject("t");
+const menuOptions = computed(() => {
+  return [
+    {
+      label: t("layout.header.Home"),
+      key: 'Home',
+    },
+    {
+      label: t("layout.header.Tags"),
+      key: 'Tags',
+    },
+    {
+      label: t("layout.header.Archive"),
+      key: 'Archive',
+    },
+    {
+      label: t("layout.header.Gossiped"),
+      key: 'Gossiped',
+    },
+    {
+      label: t("layout.header['Friendship link']"),
+      key: 'FriendshipLink',
+    },
+    {
+      label: t("layout.header['Leave comments']"),
+      key: 'LeaveComments',
+    },
+    {
+      label: t("layout.header.About"),
+      key: 'About',
+    },
+    {
+      label: t("layout.header.Navigation"),
+      key: 'Navigation',
+    }
+  ]
+});
 
-const t:any = inject("t");
-const menuOptions = ref([
-  {
-    label: t("layout.header.File"),
-    key: 'tools-files',
-    icon: renderIcon(File),
-  },
-  {
-    label: t("layout.header.Edit"),
-    key: 'tools-edit',
-    icon: renderIcon(Edit),
-  },
-  {
-    label: t("layout.header.Add"),
-    key: 'tools-add',
-    icon: renderIcon(Add),
-  },
-  {
-    label: t("layout.header.Help"),
-    key: 'tools-help',
-    icon: renderIcon(Help),
-  }
-])
-
-const activeKey = ref(null);
-const switchActive = ref(false);
-const switchChange = (value: boolean) => {
-  console.log(`Update value: ${value}`)
-}
+const activeMenuKey = ref(null);
 </script>
 
 <template>
-  <n-popover trigger="hover">
-    <template #trigger>
-      <n-gradient-text :size="24" type="success">逆光</n-gradient-text>
-    </template>
-    <span>ThreeJS Editor For Vue3.2</span>
-  </n-popover>
+  <div id="header">
+    <n-popover trigger="hover">
+      <template #trigger>
+        <n-gradient-text
+          :size="24"
+          type="success"
+        >{{ t("layout.header['Tell the shadow to love her']") }}</n-gradient-text>
+      </template>
+      <span>{{ t("layout.header['Love is to be remnant while Romance remains']") }}</span>
+    </n-popover>
 
-  <n-menu v-model:value="activeKey" mode="horizontal" dropdown-placement="top-start" :options="menuOptions" />
+    <n-menu
+      v-model:value="activeMenuKey"
+      mode="horizontal"
+      dropdown-placement="top-start"
+      :options="menuOptions"
+    />
 
-  <n-switch v-model:value="switchActive" @update:value="switchChange">
-    <template #checked>{{t("layout.header.autosave")}}</template>
-    <template #unchecked>{{t("layout.header.autosave")}}</template>
-  </n-switch>
-  <n-gradient-text class="gradient-text" type="success">r132</n-gradient-text>
+    <div>
+      <n-button type="success" size="small">{{t("layout.header['Log in']")}}</n-button>
+    </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
-.n-menu.n-menu--horizontal {
-  :deep(.n-menu-item-content) {
-    padding: 0 0.5rem;
+#header {
+  width:100%;
+  display: flex;
+  justify-content: space-between;
+
+  .n-menu.n-menu--horizontal {
+    :deep(.n-menu-item-content) {
+      padding: 0 0.5rem;
+    }
   }
-}
-.n-switch,
-.gradient-text {
-  position: absolute;
-  right: 0.5rem;
-}
-.n-switch {
-  right: 3rem;
 }
 </style>
