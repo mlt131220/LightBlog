@@ -18,7 +18,9 @@ export default {
            "Light":"浅色",
            "Dark":"深色",
            "Language":"语言",
-           "Changing the language will refresh the page":"该百年语言将刷新页面"
+           //主题设置
+           "fontSize":"字体大小",
+           "popoverColor":"弹出层颜色",
        }
     }
 

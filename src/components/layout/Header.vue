@@ -40,7 +40,7 @@ const menuOptions = computed(() => {
   ]
 });
 
-const activeMenuKey = ref(null);
+const activeMenuKey = ref("Home");
 </script>
 
 <template>
@@ -74,9 +74,9 @@ const activeMenuKey = ref(null);
   display: flex;
   justify-content: space-between;
 
-  .n-menu.n-menu--horizontal {
-    :deep(.n-menu-item-content) {
-      padding: 0 0.5rem;
+  .n-menu{
+    :deep(.n-menu-item){
+      height: 3rem;
     }
   }
 }

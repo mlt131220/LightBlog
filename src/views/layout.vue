@@ -50,17 +50,19 @@ const siderWidth = ref(300);
     width: 100%;
     height: 100%;
     position: relative;
+    background-color: red;
 
     .n-layout {
         &-header{
-            height: 2.1rem;
-            line-height: 2.1rem;
+            height: 3rem;
+            line-height: 3rem;
             display: flex;
             padding: 0 1rem;
             align-items: center;
+            border-bottom:0;
         }
         &-center-layout {
-            top: 2.1rem;
+            top: 3rem;
             bottom: 3.2rem;
             width: 100%;
         }
