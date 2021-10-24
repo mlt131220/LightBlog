@@ -1,6 +1,5 @@
-import { AnyNaptrRecord } from 'dns';
 import { createI18n } from 'vue-i18n';
-import GlobalConfig from '../config/global';
+import {Locale} from '../config/global';
 
 //引入同级目录下所有语言文件
 const modules = (import.meta as any).globEager('./*.ts');
@@ -88,7 +87,7 @@ const recursionSetLeaf = (obj:LangObj) =>{
 //注册i8n实例并引入语言文件
 const i18n = createI18n({
     legacy: false,
-    locale: GlobalConfig.locale,
+    locale: Locale,
     messages: getLangAll()
 })
 

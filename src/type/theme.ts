@@ -1,4 +1,3 @@
-
 export interface CommonTheme {
     [s:string]:string
 }
