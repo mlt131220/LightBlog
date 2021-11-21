@@ -1,13 +1,15 @@
 <script lang="ts" setup>
 import { inject } from 'vue';
 import { useI18n } from 'vue-i18n'
-import { NH3, NPopover, NButton, NIcon, NSelect, NForm, NFormItem, NInput, NColorPicker, NScrollbar } from 'naive-ui';
+import { NH3, NPopover, NButton, NIcon, NForm, NFormItem, NInput, NSlider, NColorPicker, NScrollbar,NRadioGroup,NRadio,NSpace } from 'naive-ui';
 import { Cogs } from '@vicons/fa';
 import { Locale, ThemeVar } from '../../config/global';
 
 const t: any = inject("t");
 const theme: any = inject("theme");
 const SET_THEME: any = inject("set_theme");
+//主题设置form的Model
+const themeSetting: any = inject("theme_common");
 
 /**
  * 修改语言
@@ -21,25 +23,20 @@ const SET_LOCALE = (lang: string): void => {
     SET_NAIVE_UI_LOCALE(lang);
 }
 
-//主题设置form的Model
-const themeSetting: any = inject("theme_common");
-
-//清除修改 按钮是否可点击
-const clearModificationBoolean = ():boolean => {
+//主题配置项 清除修改 按钮是否可点击
+const clearModificationBoolean = (): boolean => {
     return window.localStorage.getItem(`theme_${theme.value}_common_change`) === 'true';
 }
 
-//清除修改:当前主题配置项恢复为默认值
+//主题配置项 清除修改按钮点击事件:当前主题配置项恢复为默认值
 const restoreDefaultsAll = () => {
     for (let key in themeSetting.value) {
         themeSetting.value[key] = ThemeVar[theme.value][key];
     }
-    //主题配置恢复默认则设置为false
-    window.localStorage.setItem(`theme_${theme.value}_common_change`, "false");
 }
 
-//恢复默认按钮是否可以点击
-const isDisabled = (attr: string):boolean => {
+//主题配置项的恢复默认按钮是否可以点击
+const isDisabled = (attr: string): boolean => {
     return themeSetting.value[attr] === ThemeVar[theme.value][attr];
 }
 
@@ -73,18 +70,20 @@ const restoreDefaults = (attr: string) => {
                 }"
             >
                 <n-form-item :label="t('layout.footer.Theme')">
-                    <n-select
-                        v-model:value="theme"
-                        @update:value="SET_THEME"
-                        :options="[{ label: t('layout.footer.Light'), value: 'default' }, { label: t('layout.footer.Dark'), value: 'darkTheme' }]"
-                    />
+                    <n-radio-group v-model:value="theme" name="theme" @update:value="SET_THEME">
+                        <n-space>
+                            <n-radio value="default">{{ t('layout.footer.Light') }}</n-radio>
+                            <n-radio value="darkTheme">{{ t('layout.footer.Dark') }}</n-radio>
+                        </n-space>
+                    </n-radio-group>
                 </n-form-item>
                 <n-form-item :label="t('layout.footer.Language')">
-                    <n-select
-                        v-model:value="Locale"
-                        @update:value="SET_LOCALE"
-                        :options="[{ label: '中文', value: 'zh-CN' }, { label: 'English', value: 'en-US' }]"
-                    />
+                    <n-radio-group v-model:value="Locale" name="locale" @update:value="SET_LOCALE">
+                        <n-space>
+                            <n-radio value="zh-CN">中文</n-radio>
+                            <n-radio value="en-US">English</n-radio>
+                        </n-space>
+                    </n-radio-group>
                 </n-form-item>
             </n-form>
         </template>
@@ -113,16 +112,42 @@ const restoreDefaults = (attr: string) => {
                 }"
             >
                 <n-form-item :label="t('layout.footer.fontSize')">
-                    <n-input v-model:value="themeSetting.fontSize" />
+                    <n-slider
+                        :value="parseInt(themeSetting.fontSize)"
+                        :step="1"
+                        :min="12"
+                        :max="25"
+                        :format-tooltip="value => `${value}px`"
+                        @update:value="(value) => { themeSetting.fontSize = `${value}px` }"
+                    />
                 </n-form-item>
                 <n-form-item :label="t('layout.footer.borderRadius')">
-                    <n-input v-model:value="themeSetting.borderRadius" />
+                    <n-slider
+                        :value="parseInt(themeSetting.borderRadius)"
+                        :step="1"
+                        :min="0"
+                        :max="20"
+                        :format-tooltip="value => `${value}px`"
+                        @update:value="(value) => { themeSetting.borderRadius = `${value}px` }"
+                    />
                 </n-form-item>
                 <n-form-item :label="t('layout.footer.fontWeight')">
-                    <n-input v-model:value="themeSetting.fontWeight" />
+                    <n-slider
+                        :value="parseInt(themeSetting.fontWeight)"
+                        :step="100"
+                        :min="100"
+                        :max="900"
+                        @update:value="(value) => { themeSetting.fontWeight = `${value}` }"
+                    />
                 </n-form-item>
                 <n-form-item :label="t('layout.footer.lineHeight')">
-                    <n-input v-model:value="themeSetting.lineHeight" />
+                    <n-slider
+                        :value="parseFloat(themeSetting.lineHeight)"
+                        :step="0.1"
+                        :min="1"
+                        :max="3"
+                        @update:value="(value) => { themeSetting.lineHeight = `${value}` }"
+                    />
                 </n-form-item>
                 <n-form-item :label="t('layout.footer.bodyColor')">
                     <n-color-picker v-model:value="themeSetting.bodyColor">
@@ -131,7 +156,7 @@ const restoreDefaults = (attr: string) => {
                                 size="small"
                                 :disabled="isDisabled('bodyColor')"
                                 @click="restoreDefaults('bodyColor')"
-                            >恢复默认</n-button>
+                            >{{t("layout.footer['Restore default']")}}</n-button>
                         </template>
                     </n-color-picker>
                 </n-form-item>
@@ -142,7 +167,7 @@ const restoreDefaults = (attr: string) => {
                                 size="small"
                                 :disabled="isDisabled('baseColor')"
                                 @click="restoreDefaults('baseColor')"
-                            >恢复默认</n-button>
+                            >{{t("layout.footer['Restore default']")}}</n-button>
                         </template>
                     </n-color-picker>
                 </n-form-item>
@@ -153,7 +178,7 @@ const restoreDefaults = (attr: string) => {
                                 size="small"
                                 :disabled="isDisabled('popoverColor')"
                                 @click="restoreDefaults('popoverColor')"
-                            >恢复默认</n-button>
+                            >{{t("layout.footer['Restore default']")}}</n-button>
                         </template>
                     </n-color-picker>
                 </n-form-item>
@@ -164,7 +189,7 @@ const restoreDefaults = (attr: string) => {
                                 size="small"
                                 :disabled="isDisabled('cardColor')"
                                 @click="restoreDefaults('cardColor')"
-                            >恢复默认</n-button>
+                            >{{t("layout.footer['Restore default']")}}</n-button>
                         </template>
                     </n-color-picker>
                 </n-form-item>
@@ -175,7 +200,7 @@ const restoreDefaults = (attr: string) => {
                                 size="small"
                                 :disabled="isDisabled('borderColor')"
                                 @click="restoreDefaults('borderColor')"
-                            >恢复默认</n-button>
+                            >{{t("layout.footer['Restore default']")}}</n-button>
                         </template>
                     </n-color-picker>
                 </n-form-item>
@@ -186,7 +211,7 @@ const restoreDefaults = (attr: string) => {
                                 size="small"
                                 :disabled="isDisabled('textColor1')"
                                 @click="restoreDefaults('textColor1')"
-                            >恢复默认</n-button>
+                            >{{t("layout.footer['Restore default']")}}</n-button>
                         </template>
                     </n-color-picker>
                 </n-form-item>
@@ -197,7 +222,7 @@ const restoreDefaults = (attr: string) => {
                                 size="small"
                                 :disabled="isDisabled('textColor2')"
                                 @click="restoreDefaults('textColor2')"
-                            >恢复默认</n-button>
+                            >{{t("layout.footer['Restore default']")}}</n-button>
                         </template>
                     </n-color-picker>
                 </n-form-item>
@@ -208,7 +233,7 @@ const restoreDefaults = (attr: string) => {
                                 size="small"
                                 :disabled="isDisabled('textColor3')"
                                 @click="restoreDefaults('textColor3')"
-                            >恢复默认</n-button>
+                            >{{t("layout.footer['Restore default']")}}</n-button>
                         </template>
                     </n-color-picker>
                 </n-form-item>
@@ -219,7 +244,7 @@ const restoreDefaults = (attr: string) => {
                                 size="small"
                                 :disabled="isDisabled('placeholderColor')"
                                 @click="restoreDefaults('placeholderColor')"
-                            >恢复默认</n-button>
+                            >{{t("layout.footer['Restore default']")}}</n-button>
                         </template>
                     </n-color-picker>
                 </n-form-item>
@@ -230,7 +255,7 @@ const restoreDefaults = (attr: string) => {
                                 size="small"
                                 :disabled="isDisabled('scrollbarColor')"
                                 @click="restoreDefaults('scrollbarColor')"
-                            >恢复默认</n-button>
+                            >{{t("layout.footer['Restore default']")}}</n-button>
                         </template>
                     </n-color-picker>
                 </n-form-item>
@@ -241,18 +266,40 @@ const restoreDefaults = (attr: string) => {
                                 size="small"
                                 :disabled="isDisabled('scrollbarColorHover')"
                                 @click="restoreDefaults('scrollbarColorHover')"
-                            >恢复默认</n-button>
+                            >{{t("layout.footer['Restore default']")}}</n-button>
                         </template>
                     </n-color-picker>
                 </n-form-item>
                 <n-form-item :label="t('layout.footer.scrollbarWidth')">
-                    <n-input v-model:value="themeSetting.scrollbarWidth" />
+                    <n-slider
+                        :value="parseInt(themeSetting.scrollbarWidth)"
+                        :step="1"
+                        :min="1"
+                        :max="17"
+                        :format-tooltip="value => `${value}px`"
+                        @update:value="(value) => { themeSetting.scrollbarWidth = `${value}px` }"
+                    />
                 </n-form-item>
-                <n-form-item :label="t('layout.footer.scrollbarHeight')">
-                    <n-input v-model:value="themeSetting.scrollbarHeight" />
-                </n-form-item>
+                <!-- 滚动条高度，作用于横向滚动条 -->
+                <!-- <n-form-item :label="t('layout.footer.scrollbarHeight')">
+                    <n-slider
+                        :value="parseInt(themeSetting.scrollbarHeight)"
+                        :step="1"
+                        :min="1"
+                        :max="17"
+                        :format-tooltip="value => `${value}px`"
+                        @update:value="(value) => { themeSetting.scrollbarHeight = `${value}px` }"
+                    />
+                </n-form-item> -->
                 <n-form-item :label="t('layout.footer.scrollbarBorderRadius')">
-                    <n-input v-model:value="themeSetting.scrollbarBorderRadius" />
+                    <n-slider
+                        :value="parseInt(themeSetting.scrollbarBorderRadius)"
+                        :step="1"
+                        :min="0"
+                        :max="Math.ceil(parseInt(themeSetting.scrollbarWidth) / 2)"
+                        :format-tooltip="value => `${value}px`"
+                        @update:value="(value) => { themeSetting.scrollbarBorderRadius = `${value}px` }"
+                    />
                 </n-form-item>
             </n-form>
         </n-scrollbar>

@@ -25,7 +25,7 @@ const theme_var:ThemeVar = {
         scrollbarColorHover:"rgba(0, 0, 0, 0.4)",//滚动条Hover颜色
         scrollbarWidth:"5px",//滚动条宽度
         scrollbarHeight: '5px',//滚动条高度
-        scrollbarBorderRadius: '5px',//滚动条圆角     
+        scrollbarBorderRadius: '3px',//滚动条圆角     
     },
     "darkTheme":{
         fontWeight:"400",
@@ -42,7 +42,7 @@ const theme_var:ThemeVar = {
         scrollbarColorHover:"rgba(255, 255, 255, 0.3)",
         scrollbarWidth:"5px",
         scrollbarHeight: '5px',
-        scrollbarBorderRadius: '5px',
+        scrollbarBorderRadius: '3px',
         cardColor:"rgb(24, 24, 28)",
         popoverColor:"rgb(72, 72, 78)",
         bodyColor:"rgb(16, 16, 20)"

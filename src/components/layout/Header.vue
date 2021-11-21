@@ -50,7 +50,7 @@ const activeMenuKey = ref("Home");
         <n-gradient-text
           :size="24"
           type="success"
-        >{{ t("layout.header['Tell the shadow to love her']") }}</n-gradient-text>
+        >{{ t("layout.header.NiGuang") }}</n-gradient-text>
       </template>
       <span>{{ t("layout.header['Love is to be remnant while Romance remains']") }}</span>
     </n-popover>

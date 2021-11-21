@@ -1,6 +1,7 @@
 export default {
     layout: {
        header:{
+           "NiGuang":"逆光",
            "Tell the shadow to love her":"曾与影子诉说她",
            "Love is to be remnant while Romance remains":"爱意东升西落，浪漫至死不渝",
            "Home":"首页",
@@ -22,6 +23,7 @@ export default {
            /*主题配置项*/
            "Theme Setting":"主题设置",
            "Clear modification":"清除修改",
+           "Restore default":"恢复默认",
            "Clear only modifications under the current theme":"仅清除当前主题下的修改项!",
            "fontSize":"字体大小",
            "borderRadius":"圆角边框",

@@ -10,6 +10,8 @@ import 'vfonts/Lato.css'
 // 等宽字体
 import 'vfonts/FiraCode.css'
 
+import Bus from './utils/Bus'
+
 const app = createApp(App);
 const t = (s:string) => {
     const { t } = useI18n();
@@ -17,6 +19,9 @@ const t = (s:string) => {
 };
 app.provide("t", t);
 
-app.use(router).use(I18n);
+//注册事件发布订阅类实例
+const $bus = Bus.getInstance();
+app.provide("$bus",$bus);
 
+app.use(router).use(I18n);
 app.mount('#app');

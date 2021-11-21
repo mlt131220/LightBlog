@@ -24,7 +24,7 @@ const siderWidth = ref(300);
                 sider-placement="right"
                 position="absolute"
             >
-                <n-layout-content content-style="padding: 1.2rem;">
+                <n-layout-content>
                     <Layout.Viewport />
                 </n-layout-content>
                 <n-layout-sider
