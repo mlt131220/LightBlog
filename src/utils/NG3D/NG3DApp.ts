@@ -9,7 +9,7 @@ import NG3DBus from './NG3DBus';
 import NGIndexedDB from '../NGIndexedDB'
 
 //type
-import { Cameras } from '../../type/NG3D.type';
+import { Cameras, Geometries, Materials } from '../../type/NG3D.type';
 
 /**
  * 三维场景App入口
@@ -30,7 +30,7 @@ export default class NG3DApp {
     private indexDbClass = new NGIndexedDB('NG3DScenesDB', [{ table: 'scenes', keyPath: 'sceneID' }]);
 
     // 克隆相机
-    public camera = this.DEFAULT_CAMERA.clone();
+    public camera;
     // 设置默认渲染器
     public renderer = this.DEFAULT_RENDERER;
 
@@ -39,8 +39,8 @@ export default class NG3DApp {
 
     // 场景中所有的对象、几何体、材质、纹理、动画、相机
     public object = {}
-    public geometries = {}
-    public materials = {}
+    public geometries: Geometries = {}
+    public materials: Materials = {}
     public textures = {}
     public animations = {}
     public cameras: Cameras = {}
@@ -51,8 +51,10 @@ export default class NG3DApp {
     public constructor() {
         /* 三维场景默认相机 配置 */
         this.DEFAULT_CAMERA.name = 'Camera'
-        this.DEFAULT_CAMERA.position.set(0, 0, 0)
-        this.DEFAULT_CAMERA.lookAt(new THREE.Vector3())
+        this.DEFAULT_CAMERA.position.set(0, 10, 0)
+        this.DEFAULT_CAMERA.lookAt(new THREE.Vector3(0,0,0));
+
+        this.camera = this.DEFAULT_CAMERA.clone();
 
         /* 三维场景默认渲染器 配置 */
         //设置颜色及其透明度
@@ -64,6 +66,8 @@ export default class NG3DApp {
 
         /* 设置场景信息 */
         this.scene.name = 'Scene';
+        this.scene.background = new THREE.Color( 0xdbdbdb );
+		this.scene.fog = new THREE.Fog( 0x000000, 250, 1400 );
 
         this.addCamera(this.camera);
 
@@ -102,6 +106,24 @@ export default class NG3DApp {
 
     /**
      * @param {THREE.Object3D} object 对象
+     * @description 新建一个对象
+     */
+    addObject(object: THREE.Object3D) {
+        // 遍历对象，存储所有的几何数据、材质数据
+        object.traverse((child: any) => {
+            if (child.geometry !== undefined) this.addGeometry(child.geometry)
+            if (child.material !== undefined) this.addMaterial(child.material)
+            this.addCamera(child) // 如果包含子相机，添加
+        })
+        // 对象添加到场景中
+        this.scene.add(object)
+        // 事件分发
+        this.$bus.dispatch("objectAdded", object)
+        this.$bus.dispatch("sceneGraphChanged")
+    }
+
+    /**
+     * @param {THREE.Object3D} object 对象
      * @description 删除所有的对象
      */
     removeObject(object: THREE.Object3D) {
@@ -122,6 +144,21 @@ export default class NG3DApp {
         // 对象移除事件、场景图改变事件
         this.$bus.dispatch("objectRemoved", object)
         this.$bus.dispatch("sceneGraphChanged")
+    }
+
+    // 添加几何数据
+    addGeometry(geometry: THREE.BufferGeometry) {
+        this.geometries[geometry.uuid] = geometry;
+    }
+
+    // 添加材质
+    addMaterial(material: THREE.Material) {
+        this.materials[material.uuid] = material;
+    }
+
+    // 移除材质
+    removeMaterial(material: THREE.Material) {
+        delete this.materials[material.uuid]
     }
 
     /**

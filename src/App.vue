@@ -8,7 +8,6 @@ let theme_common = ref(JSON.parse(window.localStorage.getItem(`theme_${Theme}_co
 
 //监听 用户修改 主题配置
 watchEffect(() => {
-    console.log("App.vue -> watchEffect")
     window.localStorage.setItem(`theme_${theme.value}_common`, JSON.stringify(theme_common.value));
     //修改过主题配置则设置为true
     let bool = false;

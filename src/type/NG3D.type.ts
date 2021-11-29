@@ -2,3 +2,11 @@
 export interface Cameras{
     [uuid:string]:THREE.PerspectiveCamera
 }
+
+export interface Geometries{
+    [uuid:string]:THREE.BufferGeometry
+}
+
+export interface Materials{
+    [uuid:string]:THREE.Material
+}

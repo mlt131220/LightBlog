@@ -4,7 +4,7 @@ import NG3DApp from '../../utils/NG3D/NG3DApp';
 import Viewport from '../../utils/NG3D/NG3DViewPort';
 
 const NG3D = new NG3DApp();
-const viewport_dom = ref<HTMLElement | null>();
+const viewport_dom = ref();
 
 onMounted(() => {
     const sceneViewPort = new Viewport(

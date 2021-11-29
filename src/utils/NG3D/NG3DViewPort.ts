@@ -9,7 +9,7 @@ import NG3DScene from './NG3DScene';
 
 export default class NG3DViewPort {
     public container; //三维视图区域
-    public NG3DApp;
+    public NG3DApp:NG3DApp;
     public $bus;// 消息分发系统
     public renderer;
     public camera;// 场景中的相机
@@ -20,7 +20,7 @@ export default class NG3DViewPort {
      * @param {*} container 三维显示区域
      * @param {*} NG3DApp 三维主类
      */
-    constructor(container: any, NG3DApp: NG3DApp) {
+    constructor(container: HTMLElement, NG3DApp: NG3DApp) {
         this.container = container;
         this.NG3DApp = NG3DApp;
         this.$bus = NG3DApp.$bus;
@@ -43,7 +43,7 @@ export default class NG3DViewPort {
         })
 
         // 开启动画
-        requestAnimationFrame(this.animate);
+        this.animate();
     }
 
     updateAspectRatio() {
@@ -53,8 +53,8 @@ export default class NG3DViewPort {
 
     // 动画
     animate() {
-        // 动画循环
-        requestAnimationFrame(this.animate)
+        // 动画循环,通过bind改变this指向
+        requestAnimationFrame(this.animate.bind(this))
         // 动画
         const mixer = this.NG3DApp.mixer;
         // 动画状态时正在被使用时才实时更新
@@ -62,10 +62,12 @@ export default class NG3DViewPort {
         //     mixer.update((time - this.prevTime) / 1000)
         //     this.render()
         // }
+        this.render();
     }
 
     // 渲染
     render() {
+        console.log("render")
         // 更新场景矩阵
         this.scene.updateMatrixWorld()
         // 渲染场景
