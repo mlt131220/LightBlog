@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/ng.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>逆光</title>
+    <link rel="stylesheet" href="/static/aplayer/APlayer.min.css">
+    <style>
+        html,
+        body,
+        #root {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            font-family: 'MiSans Regular', serif;
+        }
+
+        @font-face {
+            font-family: 'xskt';
+            src: url(/static/font/xskt.otf);
+        }
+
+        @font-face {
+            font-family: 'dfdk';
+            src: url(/static/font/DongFangDaKai.ttf);
+        }
+
+        @font-face {
+            font-family: 'MiSans Regular';
+            src: url(/static/font/MiSans-Regular.ttf);
+        }
+
+        @font-face {
+            font-family: 'mh';
+            src: url(/static/font/mh.ttf);
+        }
+
+        @font-face {
+            font-family: 'fhst';
+            src: url(/static/font/飞花宋体.ttf);
+        }
+
+        ::-webkit-scrollbar {
+            width: .25rem;
+            height: .25rem;
+        }
+
+        /*定义滚动条轨道 内阴影+圆角*/
+        ::-webkit-scrollbar-track {
+            border-radius: .5rem;
+            background-color: rgba(58, 51, 51, 0.075);
+        }
+
+        /*定义滑块 内阴影+圆角*/
+        ::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            box-shadow: inset 0 0 .3rem rgba(0, 0, 0, .2);
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        /* 歌词 */
+        .aplayer.aplayer-fixed .aplayer-lrc{
+            left: -40%;
+            bottom: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <meting-js server="netease" type="playlist" id="4933593396" fixed="true" autoplay="true" loop="all" order="random"
+        preload="auto" list-folded="ture" list-max-height="500px" storage-name="song" lrc-type="0" >
+    </meting-js>
+
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+        /*添加自执行函数，为rem设置自适应的根DOM字体大小，默认1920屏幕 1rem = 20px */
+        (function () {
+            // 设置 rem 函数 1920屏幕下，1rem = 20px;
+            function resize() {
+                document.documentElement.style.fontSize = document.documentElement.clientWidth / 1920 * 20 + 'px';
+                document.body.style.fontSize = "0.85rem"
+            }
+
+            // 监听resize事件，调整窗口大小，感受rem的作用，这里只考虑竖屏的情况
+            window.onresize = resize;   //window.onresize监听div和屏幕的改变
+            resize();
+        })()
+    </script>
+
+    <script src="/static/aplayer/APlayer.min.js"></script>
+    <script src="/static/aplayer/Meting.min.js"></script>
+</body>
+
+</html>
